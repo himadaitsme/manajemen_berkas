@@ -1,0 +1,90 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{component/layout}">
+<head>
+    <title>Referensi Jenis Berkas</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="row">
+	    <div class="col-lg-12 col-md-12 col-12">
+	      <!-- Page header -->
+	      <div>
+	        <div class="d-flex justify-content-between align-items-center">
+	          <div class="mb-2 mb-lg-0">
+	            <h3 class="mb-0 fw-bold text-white">Referensi Jenis Berkas</h3>
+	          </div>
+	          <div>
+	            <a href="#" class="btn btn-white" id="button-tambah-jenis-berkas">Tambah Jenis Berkas</a>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <div class="row mt-6">
+	    <div class="col-md-12 col-12">
+	      <!-- card  -->
+	      <div class="card">
+	        <div class="card-body">
+	        	<!-- table  -->
+		        <div class="table">
+		          	<table id="table-jenis-berkas" class="table text-nowrap mb-0">
+			            <thead class="table-light">
+			              <tr>
+			                <th>Kode</th>
+			                <th>Nama Jenis Berkas</th>
+	     		            <th>Aksi</th>
+			              </tr>
+			            </thead>
+		        	</table>
+		        </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <!-- START MODAL REKAM -->
+		<div class="modal fade" data-bs-backdrop="static" id="modal-rekam-jenis-berkas" tabindex="-1" aria-labelledby="modal-rekam-jenis-berkas-label" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modal-rekam-jenis-berkas-title">Rekam Jenis Berkas</h5>
+					</div>
+					<div class="modal-body">
+						<form id="form-rekam-jenis-berkas" action="">
+		                    <!-- row -->
+							<input type="hidden" class="form-control" name="id">
+		                    <div class="mb-3 row">
+		                      	<label for="kodeJenisBerkas" class="col-sm-3 col-form-label form-label">Kode</label>
+		                      	<div class="col-md-6 col-12">
+		                        	<input type="text" class="form-control" placeholder="kode jenis berkas" name="kodeJenisBerkas" required="">
+		                      	</div>
+		                    </div>
+		                    <div class="mb-3 row">
+		                      	<label for="fullName" class="col-sm-3 col-form-label form-label">Nama</label>
+		                      	<div class="col-md-6 col-12">
+		                        	<input type="text" class="form-control" placeholder="nama jenis berkas" name="jenisBerkas" required="">
+		                     	</div>
+		                    </div>
+	                    	<div class="mb-3 row border-top">
+	                      		<div class="offset-md-4 col-md-8 mt-4">
+		                      		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	                          		<button type="submit" class="btn btn-primary" >Simpan</button>
+	                      		</div>
+	                    	</div>
+                  		</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END MODAL REKAM -->
+	</div>
+	
+	
+
+<div layout:fragment="js" th:remove="tag">
+	<script th:src="@{/pages/js/jenis-berkas.js}"></script>
+</div>
+</body>
+</html>

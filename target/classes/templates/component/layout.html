@@ -1,0 +1,187 @@
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+	    <!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+		<title layout:title-pattern="$CONTENT_TITLE - $LAYOUT_TITLE">Manajemen Berkas</title>
+		
+		<!-- Favicon icon-->
+		<link rel="shortcut icon" type="image/x-icon" th:href="@{/djp.ico}">
+		
+		<!-- Libs CSS -->
+		
+		<link rel="stylesheet" th:href="@{/assets/libs/prismjs/themes/prism.css}">
+		<link rel="stylesheet" th:href="@{/assets/libs/prismjs/plugins/line-numbers/prism-line-numbers.css}">
+		<link rel="stylesheet" th:href="@{/assets/libs/prismjs/plugins/toolbar/prism-toolbar.css}">
+		<link rel="stylesheet" th:href="@{/assets/libs/bootstrap-icons/font/bootstrap-icons.css}">
+		<link rel="stylesheet" th:href="@{/assets/libs/dropzone/dist/dropzone.css}" >
+		<link rel="stylesheet" th:href="@{/assets/libs/@mdi/font/css/materialdesignicons.min.css}" />
+		
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.css">
+		
+		<!-- Theme CSS -->
+		<link rel="stylesheet" th:href="@{/assets/css/theme.min.css}">
+		
+        <link th:href="@{/assets/plugins/datatables-1.11.3/datatables.min.css}" rel="stylesheet">
+		<script th:inline="javascript">
+			/*<![CDATA[*/
+			
+			    var message = /*[[${#authentication.authorities}]]*/ 'default';
+			    var roles = [];
+			    message.forEach(element => roles.push(element.authority));
+			    const ROLE_PELAYANAN = 'ROLE_PELAYANAN';
+			    const ROLE_P3 = 'ROLE_P3';
+			    const ROLE_ASPEN = 'ROLE_ASPEN';
+				//console.log(roles.includes('ROLE_PELAYANAN')) 
+			/*]]>*/
+		</script>
+  	</head>
+    <body>
+   	<div id="db-wrapper">
+	     <!-- navbar vertical -->
+	     <!-- Sidebar -->
+		 <nav class="navbar-vertical navbar">
+		    <div class="nav-scroller">
+		        <!-- Brand logo -->
+		        <a class="navbar-brand" th:href="@{/}">
+		            <img th:src="@{/assets/images/brand/logo/logo.png}" alt="" />
+		        </a>
+		        <!-- Navbar nav -->
+		        <ul class="navbar-nav flex-column" id="sideNavbar">
+		    		<li class="nav-item">
+                    	<a class="nav-link" th:href="@{/dashboard}" th:classappend="${#httpServletRequest.requestURI == '/dashboard' ? 'active' : ''}">
+                        	<i data-feather="sidebar" class="nav-icon icon-xs me-2"></i>
+                        	Dashboard
+                    	</a>
+                   	</li>
+			        <li class="nav-item">
+			            <div class="navbar-heading">Master Data</div>
+			        </li>
+			        
+	                   <li class="nav-item">
+	                    <a class="nav-link" th:href="@{/berkas}" th:classappend="${#httpServletRequest.requestURI == '/berkas' ? 'active' : ''}">
+	                        <i data-feather="sidebar" class="nav-icon icon-xs me-2"></i>
+	                        Berkas
+	                    </a>
+	                   </li>
+	                   
+	                   <li class="nav-item">
+                    		<a class="nav-link" th:href="@{/retensi}" th:classappend="${#httpServletRequest.requestURI == '/retensi' ? 'active' : ''}">
+                        		<i data-feather="sidebar" class="nav-icon icon-xs me-2"></i>
+                        		Retensi
+                    		</a>
+	                   </li>
+	                   <li class="nav-item">
+	                   		<div class="navbar-heading">Transaksi</div>
+	                   </li>
+	                   <li class="nav-item">
+                    		<a class="nav-link" th:href="@{/peminjaman}" th:classappend="${#httpServletRequest.requestURI == '/peminjaman' ? 'active' : ''}">
+                        		<i data-feather="sidebar" class="nav-icon icon-xs me-2"></i>
+                        		Peminjaman
+                    		</a>
+	                   </li>
+	                   <li class="nav-item">
+                    		<a class="nav-link" th:href="@{/persetujuan}" th:classappend="${#httpServletRequest.requestURI == '/persetujuan' ? 'active' : ''}">
+                        		<i data-feather="sidebar" class="nav-icon icon-xs me-2"></i>
+                        		Persetujuan
+                    		</a>
+	                   </li>
+	                   <!-- Nav item -->
+	                   <li class="nav-item">
+	                   	<div class="navbar-heading">Data Referensi</div>
+	                   </li>
+	
+	                   <!-- Nav item -->
+	                   <li class="nav-item">
+	                       <a class="nav-link" th:href="@{/jenis-berkas}">
+	                           <i data-feather="clipboard" class="nav-icon icon-xs me-2" >
+	                       </i>  Jenis Berkas
+	                       </a>
+	                    </li>
+	                </ul>
+				</div>
+				</nav>
+	     <!-- Page content -->
+	     <div id="page-content">
+	        <div class="header @@classList">
+		  		<!-- navbar -->
+		  		<nav class="navbar-classic navbar navbar-expand-lg">
+		    		<a id="nav-toggle" href="#">
+		    			<i data-feather="menu" class="nav-icon me-2 icon-xs"></i>
+	    			</a>
+				    <div class="ms-lg-3 d-none d-md-none d-lg-block"></div>
+					    <!--Navbar nav -->
+					    <ul class="navbar-nav navbar-right-wrap ms-auto d-flex nav-top-wrap">
+					      <!-- List -->
+					      <li class="dropdown ms-2">
+					        <a class="rounded-circle" href="#" role="button" id="dropdownUser" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+					          <!-- <div class="avatar avatar-md avatar-indicators avatar-online"> -->
+					           <div> <span th:text="${#authentication.getPrincipal().getNama()}"></span> <i class="fas fa-user"></i></div>
+					           
+					           <!--  <img alt="avatar" th:src="@{/assets/images/avatar/avatar-1.jpg}" class="rounded-circle" /> -->
+					          <!-- </div> -->
+					        </a>
+					        <div class="dropdown-menu dropdown-menu-end"
+					          aria-labelledby="dropdownUser">
+					          <!-- <div class="px-4 pb-0 pt-2">
+					            <div class="lh-1 ">
+					              <h5 class="mb-1" th:text="${#authentication.getPrincipal().getNama()}"></h5>
+					              <a href="#" class="text-inherit fs-6">View my profile</a>
+					            </div>
+					            <div class=" dropdown-divider mt-3 mb-2"></div>
+					          </div> -->
+					
+					          <ul class="list-unstyled">
+					
+					            <li>
+					              <a class="dropdown-item" th:href="@{/logout}">
+					                <i class="me-2 icon-xxs dropdown-item-icon"
+					                  data-feather="power"></i>Sign Out
+					              </a>
+					            </li>
+					          </ul>
+					
+					        </div>
+					      </li>
+					    </ul>
+					  </nav>
+				</div>
+		        <!-- Container fluid -->
+		        <div class="bg-primary pt-10 pb-21"></div>
+		        <div class="container-fluid mt-n22 px-6">
+		        	<div layout:fragment="content"></div>
+		          </div>
+		      </div>
+    		</div>
+		
+		    <!-- Scripts -->
+		    <!-- Libs JS -->
+		    
+		<script th:src="@{/assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+		<script th:src="@{/assets/libs/jquery/dist/jquery.min.js}"></script>
+		<script th:src="@{/assets/libs/jquery-slimscroll/jquery.slimscroll.min.js}"></script>
+		<script th:src="@{/assets/libs/feather-icons/dist/feather.min.js}"></script>
+		<script th:src="@{/assets/libs/prismjs/components/prism-core.min.js}"></script>
+		<script th:src="@{/assets/libs/prismjs/components/prism-markup.min.js}"></script>
+		<script th:src="@{/assets/libs/prismjs/plugins/line-numbers/prism-line-numbers.min.js}"></script>
+		<script th:src="@{/assets/libs/apexcharts/dist/apexcharts.min.js}"></script>
+		<script th:src="@{/assets/libs/dropzone/dist/min/dropzone.min.js}"></script>
+		<script th:src="@{/assets/plugins/datatables-1.11.3/datatables.min.js}"></script>
+		<script th:src="@{/assets/plugins/sweetalert2@11.1.9/sweetalert2.all.min.js}"></script>
+        <script th:src="@{/assets/plugins/jquery-blockUI@2.70.0/jquery.blockUI.js}"></script>
+		<script src="https://cdn.jsdelivr.net/npm/jquery-mask-plugin@1.14.16/dist/jquery.mask.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+        
+		
+		<!-- clipboard -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.12/clipboard.min.js"></script>
+		
+		<!-- Theme JS -->
+		<script th:src="@{/assets/js/theme.min.js}"></script>
+		    	
+        <div layout:fragment="js"></div>
+    </body>
+</html>

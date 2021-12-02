@@ -1,0 +1,227 @@
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity4"
+      xmlns="http://www.w3.org/1999/xhtml"
+      layout:decorate="~{component/layout}">
+<head>
+    <title>Administrasi Berkas</title>
+    <script th:inline="javascript">
+	/*<![CDATA[*/
+	    var listSemuaJenisBerkas = /*[[${listSemuaJenisBerkas}]]*/ 'default';
+	    var listSemuaRak = /*[[${listSemuaRak}]]*/ 'default';
+	/*]]>*/
+	</script>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div class="row">
+	    <div class="col-lg-12 col-md-12 col-12">
+	      <!-- Page header -->
+	      <div>
+	        <div class="d-flex justify-content-between align-items-center">
+	          <div class="mb-2 mb-lg-0">
+	            <h3 class="mb-0 fw-bold text-white">Administrasi Berkas</h3>
+	          </div>
+	          <div>
+	            <a href="#" class="btn btn-white" id="button-rekam-berkas">Tambah Berkas Baru</a>
+	          </div>
+	        </div>
+	      </div>
+	    </div>
+	  </div>
+	  <!-- row  -->
+	  <div class="row mt-6">
+	    <div class="col-md-12 col-12">
+	      	<div class="card">
+              	<!-- card body -->
+              	<div class="card-body">
+              		<form id="form-cari-berkas">
+                		<div class="row">
+	                  		<div class="col-xl-3 col-md-6 mb-3">
+		                    	<label for="npwp" class="form-label">NPWP</label>
+		                    	<input type="text" class="form-control npwp15" placeholder="NPWP" name="npwp">
+	                  		</div>
+	                  		<div class="col-xl-3 col-md-6 mb-3">
+	                    		<label for="jenisBerkas" class="form-label">Jenis Berkas</label>
+			                    <select class="form-select" name="jenisBerkas">
+						         	<option value="">Semua</option>
+									<option th:each="entry : ${listSemuaJenisBerkas}" th:value="${entry.kodeJenisBerkas}" th:text="${entry.jenisBerkas}"></option>
+							    </select>
+	               			</div>
+	                  		<div class="col-xl-3 col-md-6 mb-3">
+	                    		<label for="masaPajak" class="form-label">Masa</label>
+	                    		<select class="form-select" name="masaPajak">
+						          <option value="">Semua</option>
+						          <option th:each="entry : ${listMasaPajak.entrySet()}" th:value="${entry.key}" th:text="${entry.value}"></option>
+						        </select>
+	                  		</div>
+	                  		<div class="col-xl-3 col-md-6 mb-3">
+		                    	<label for="tahunPajak" class="form-label">Tahun</label>
+		                    	<input type="number" class="form-control" placeholder="tahun" name="tahunPajak">
+	                  		</div>
+			             	<div class="col-xl-3 col-md-12 ">
+		                	   <button type="button" class="btn btn-primary" id="button-filter-berkas">Filter</button>
+			              	</div>
+            			</div>
+            		</form>
+              	</div>
+            </div>
+	    </div>
+	  </div>
+	  <!-- row  -->
+	  <div class="row mt-6">
+	    <div class="col-md-12 col-12">
+	      <!-- card  -->
+	      <div class="card">
+	        <div class="card-body">
+	        	<!-- table  -->
+		        <div class="table">
+		          	<table id="table-berkas" class="table table-sm table-bordered text-nowrap mb-0">
+			            <thead class="table-primary">
+			              <tr>
+			                <th>NPWP</th>
+			                <th>Nama WP</th>
+			                <th>Jenis Berkas</th>
+			                <th>Masa Pajak</th>
+			                <th>Tahun Pajak</th>
+			                <th>Tanggal Berkas</th>
+	     		            <th>Lokasi</th>
+	     		            <th>Softcopy</th>
+	     		            <th>Aksi</th>
+			              </tr>
+			            </thead>
+		        	</table>
+		        </div>
+	        </div>
+	        
+	      </div>
+	    </div>
+	  </div>
+	
+		<!-- START MODAL REKAM -->
+		<div class="modal fade" data-bs-backdrop="static" id="modal-rekam-berkas" tabindex="-1" aria-labelledby="modal-rekam-berkas-label" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modal-rekam-berkas-title">Rekam Berkas</h5>
+					</div>
+					<div class="modal-body">
+						<form id="form-rekam-berkas" action="">
+		                    <!-- row -->
+							<input type="hidden" class="form-control" name="id">
+		                    <div class="mb-3 row">
+		                      	<label for="fullName" class="col-sm-4 col-form-label form-label">NPWP</label>
+		                      	<div class="col-md-8 col-12">
+		                        	<input type="text" class="form-control npwp15" placeholder="NPWP" id="npwp15" name="npwp15" required="" onblur="searchNpwp()">
+		                      	</div>
+		                    </div>
+		                    <div class="mb-3 row">
+		                      	<label for="fullName" class="col-sm-4 col-form-label form-label">Nama WP</label>
+		                      	<div class="col-md-8 col-12">
+		                        	<input type="text" class="form-control" placeholder="Nama WP" id="namaWp" name="namaWp" required="">
+		                     	</div>
+		                    </div>
+		                    <div class="mb-3 row">
+		                      	<label for="jenisBerkas" class="col-sm-4 col-form-label form-label">Jenis Berkas</label>
+								<div class="col-md-8 col-12">
+	                      	  		<select class="form-select" id="jenisBerkas" name="jenisBerkas" required="" onchange="changeJenisBerkas()">
+	                            		<option value="">Pilih Jenis Berkas</option>
+	                            		<option th:each="entry : ${listSemuaJenisBerkas}" th:value="${entry.kodeJenisBerkas}" th:text="${entry.jenisBerkas}"></option>
+                          			</select>
+                      			</div>
+	                    	</div>
+		                   
+		                    <!-- row -->
+		                    <div class="mb-3 row">
+		                      	<label for="tahunPajak" class="col-sm-4 col-form-label form-label">Tahun Pajak</label>
+		                      	<div class="col-md-8 col-12">
+		                       	 	<input type="number" class="form-control" placeholder="tahun pajak" id="tahunPajak" name="tahunPajak" required="">
+		                      	</div>
+		                    </div>
+		                    <!-- row -->
+		                    <div class="mb-3 row" id="inputMasaPajak" style="display : none">
+		                      	<label for="masaPajak" class="col-sm-4 col-form-label form-label">Masa Pajak</label>
+		                      	<div class="col-md-8 col-12">
+		                      	  	<select class="form-select" id="masaPajak" name="masaPajak" required="">
+		                            	<option value="">Pilih Masa Pajak</option>
+		                            	<option th:each="entry : ${listMasaPajak.entrySet()}" th:value="${entry.key}" th:text="${entry.value}"></option>
+		                          	</select>
+		                      	</div>
+		                    </div>
+		                     <!-- row -->
+		                    <div class="mb-3 row">
+		                      	<label for="tanggalBerkas" class="col-sm-4 col-form-label form-label">Tanggal Berkas</label>
+	                      		<div class="col-md-8 col-12">
+		                        	<input type="date" class="form-control" id="tanggalBerkas" name="tanggalBerkas" required="">
+		                      	</div>
+		                    </div>
+		                    <div class="row">
+				            	<div class="col-xl-3 col-md-6 mb-3">
+				                    <label for="notification" class="form-label">Rak?</label>
+				                    <select class="form-select" id="noRak" name="noRak" required="" onchange="changeRak()">
+							          <option value="">Pilih</option>
+							          <option th:each="entry : ${listSemuaRak}" th:value="${entry.rak}" th:text="${entry.rak}"></option>
+				        			</select>
+			                  	</div>
+		                  		<div class="col-xl-3 col-md-6 mb-3">
+				                    <label for="dailyDigest" class="form-label">Tingkat?</label>
+				                    <input type="number" class="form-control" min="1" id="noTingkat" name="noTingkat" required="">
+			                  	</div>
+			                  	<div class="col-xl-3 col-md-6 mb-3">
+				                    <label for="time" class="form-label">Kardus?</label>
+				                    <input type="number" class="form-control" min="1" id="noKardus" name="noKardus" required="">
+			                  	</div>
+			                   	<div class="col-xl-3 col-md-6 mb-3">
+				                    <label for="time" class="form-label">No Urut?</label>
+				                    <input type="number" class="form-control" min="1" id="noUrutMap" name="noUrutMap" required="">
+			                  	</div>
+	                    	</div>
+	                    	<div class="mb-3 row border-top">
+	                      		<div class="offset-md-4 col-md-8 mt-4">
+		                      		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	                          		<button type="submit" class="btn btn-primary" >Simpan</button>
+	                      		</div>
+	                    	</div>
+                  		</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END MODAL REKAM -->
+		<!-- START MODAL UPLOAD -->
+		<div class="modal fade" data-bs-backdrop="static" id="modal-upload-berkas" tabindex="-1" aria-labelledby="modal-upload-berkas-label" aria-hidden="true">
+			<div class="modal-dialog modal-lg">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="modal-upload-berkas-title">Upload Berkas</h5>
+					</div>
+					<div class="modal-body">
+						<form id="form-upload-berkas" action="">
+		                    <!-- row -->
+							<input type="hidden" class="form-control" name="id">
+		                    <!-- row -->
+		                    <div class="mb-3 row">
+		                      	<label for="file" class="col-sm-2 col-form-label form-label">File</label>
+		                      	<div class="col-md-8">
+		                       	 	<input type="file" class="form-control" name="file" required="">
+		                      	</div>
+	                    	</div>
+	                    	<div class="mb-3 row border-top">
+	                      		<div class="offset-md-4 col-md-8 mt-4">
+		                      		<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+	                          		<button type="submit" class="btn btn-primary" >Simpan</button>
+	                      		</div>
+	                    	</div>
+                  		</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- END MODAL UPLOAD -->
+	</div>
+
+<div layout:fragment="js" th:remove="tag">
+	<script th:src="@{/pages/js/berkas.js}"></script>
+</div>
+</body>
+</html>
